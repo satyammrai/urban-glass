@@ -1,0 +1,7 @@
+{
+  "name": "Urban Glass - Premium Glass & Mirror Studio",
+  "description": "Luxury glass and mirror studio in Gurugram specializing in LED mirrors, toughened glass, and custom interior glass solutions.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
