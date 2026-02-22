@@ -1,538 +1,324 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Star, 
-  ArrowRight, 
   Phone, 
   MessageSquare, 
   CheckCircle2, 
   MapPin, 
   Clock, 
-  Mail,
-  Shield,
-  Zap,
-  Award,
-  Maximize,
-  Layout,
-  Layers,
-  Sparkles,
-  Menu,
-  X,
-  ArrowDown,
-  Building2,
-  Briefcase,
-  Scale,
-  CreditCard,
-  Plane,
-  Home,
-  CloudUpload,
-  Trash2,
-  Play,
+  Mail, 
+  Star, 
+  ArrowRight, 
+  Menu, 
+  X, 
+  Shield, 
+  Zap, 
+  Award, 
+  Maximize, 
+  Layout, 
+  Layers, 
+  Sparkles, 
   ArrowUpRight,
-  Calendar,
-  FilePlus
+  Settings,
+  Hammer,
+  Truck,
+  Building2
 } from 'lucide-react';
 
 // --- Components ---
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const menuItems = [
+    { name: 'Home', href: '#' },
+    { name: 'Products', href: '#products' },
+    { name: 'Services', href: '#services' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Reviews', href: '#reviews' },
+    { name: 'About Us', href: '#about' },
+    { name: 'Contact', href: '#contact' },
+  ];
 
   return (
-    <>
-      <nav className="fixed flex z-50 text-white mix-blend-difference w-full px-6 md:px-12 py-6 md:py-8 top-0 items-center justify-between">
-        <a href="#" className="block">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 border border-white flex items-center justify-center">
-              <span className="text-lg font-display font-bold">U</span>
-            </div>
-            <span className="text-sm font-display font-bold tracking-widest uppercase hidden sm:block">Urban Glass</span>
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'py-4 glass-dark text-white' : 'py-8 bg-transparent text-white'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <a href="#" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 border-2 border-accent flex items-center justify-center group-hover:bg-accent transition-colors duration-500">
+            <span className="text-xl font-bold tracking-tighter">U</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold tracking-[0.2em] uppercase">Urban Glass</span>
+            <span className="text-[8px] tracking-[0.4em] uppercase opacity-60">अर्बन ग्लास</span>
           </div>
         </a>
-        <div className="hidden md:flex gap-10 uppercase text-[10px] font-semibold tracking-[0.3em]">
-          <a href="#collections" className="hover:text-gray-300 transition-colors">Collections</a>
-          <a href="#gallery" className="hover:text-gray-300 transition-colors">Gallery</a>
-          <a href="#studio" className="hover:text-gray-300 transition-colors">The Studio</a>
-          <a href="#contact" className="hover:text-gray-300 transition-colors">Contact</a>
-        </div>
-        <button className="md:hidden z-50" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </nav>
 
-      {/* Mobile Menu Overlay */}
-      <motion.div 
-        initial={{ x: "100%" }}
-        animate={{ x: isOpen ? 0 : "100%" }}
-        transition={{ type: "spring", damping: 25, stiffness: 200 }}
-        className="fixed inset-0 bg-dark z-[45] flex flex-col items-center justify-center gap-8 md:hidden"
-      >
-        {['Collections', 'Gallery', 'The Studio', 'Contact'].map((item) => (
-          <a 
-            key={item}
-            href={`#${item.toLowerCase().replace(' ', '')}`}
-            onClick={() => setIsOpen(false)}
-            className="text-bg font-display text-2xl uppercase tracking-tighter hover:text-accent transition-colors"
-          >
-            {item}
-          </a>
-        ))}
-        <div className="mt-8 flex flex-col items-center gap-4">
-          <a href="tel:9266747433" className="text-bg/60 text-xs uppercase tracking-widest">9266747433</a>
-          <div className="flex gap-6">
-            <MessageSquare className="w-5 h-5 text-accent" />
-            <Phone className="w-5 h-5 text-accent" />
+        <div className="hidden lg:flex items-center gap-8">
+          <div className="flex gap-8 uppercase text-[10px] font-bold tracking-[0.2em]">
+            {menuItems.map((item) => (
+              <a key={item.name} href={item.href} className="hover:text-accent transition-colors duration-300">
+                {item.name}
+              </a>
+            ))}
+          </div>
+          <div className="flex items-center gap-4">
+            <a href="tel:9266747433" className="flex items-center gap-2 bg-accent text-dark px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider hover:scale-105 transition-transform">
+              <Phone className="w-3 h-3" />
+              Call Now
+            </a>
+            <a href="https://wa.me/9266747433" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider hover:bg-white hover:text-dark transition-all">
+              <MessageSquare className="w-3 h-3" />
+              WhatsApp
+            </a>
           </div>
         </div>
-      </motion.div>
-    </>
+
+        <button className="lg:hidden" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-full left-0 w-full glass-dark text-white p-8 lg:hidden"
+          >
+            <div className="flex flex-col gap-6 text-center">
+              {menuItems.map((item) => (
+                <a key={item.name} href={item.href} onClick={() => setIsOpen(false)} className="text-sm uppercase tracking-widest font-bold">
+                  {item.name}
+                </a>
+              ))}
+              <div className="flex flex-col gap-4 mt-4">
+                <a href="tel:9266747433" className="bg-accent text-dark py-4 rounded-lg font-bold uppercase tracking-widest">Call Now</a>
+                <a href="https://wa.me/9266747433" className="border border-white/20 py-4 rounded-lg font-bold uppercase tracking-widest">WhatsApp</a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 };
 
 const Hero = () => {
   return (
-    <section className="h-screen relative flex items-center justify-center overflow-hidden">
-      {/* Video Background */}
-      <video 
-        className="w-full h-full object-cover absolute top-0 right-0 bottom-0 left-0 brightness-[0.4]" 
-        autoPlay loop muted playsInline
-      >
-        <source src="https://videos.pexels.com/video-files/7578544/7578544-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-      </video>
+    <section className="relative h-screen flex items-center justify-center overflow-hidden bg-dark">
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop" 
+          className="w-full h-full object-cover opacity-40 grayscale"
+          alt="Luxury Glass Architecture"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-dark/60 via-transparent to-dark"></div>
+      </div>
 
-      <div className="text-white text-center mix-blend-difference z-10 px-4 relative">
-        <motion.h1 
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1.2, ease: "circOut" }}
-          className="font-display text-[10vw] leading-[0.85] tracking-tighter uppercase"
+      <div className="relative z-10 text-center text-white px-6 max-w-5xl">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
         >
-          URBAN GLASS
-        </motion.h1>
-        <motion.h1 
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1.2, ease: "circOut", delay: 0.2 }}
-          className="font-display text-[10vw] leading-[0.85] tracking-tighter uppercase"
-        >
-          STUDIO
-        </motion.h1>
+          <div className="flex justify-center gap-4 mb-8">
+            <div className="flex items-center gap-2 glass px-4 py-2 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold">
+              <Star className="w-3 h-3 text-accent fill-accent" />
+              5.0 Rated on Google
+            </div>
+            <div className="flex items-center gap-2 glass px-4 py-2 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold">
+              <Award className="w-3 h-3 text-accent" />
+              Gurgaon's Trusted Experts
+            </div>
+          </div>
 
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1 }}
-          className="mt-12 max-w-lg mx-auto"
-        >
-          <p className="text-[10px] font-medium uppercase tracking-[0.4em] leading-relaxed mb-8">
-            Premium Toughened Glass & Mirror Solutions in Gurgaon
+          <h1 className="text-5xl md:text-8xl font-bold tracking-tighter leading-[0.9] uppercase mb-8">
+            Redefining Spaces with <br />
+            <span className="gold-gradient">Premium Glass</span>
+          </h1>
+          
+          <p className="text-sm md:text-lg uppercase tracking-[0.4em] font-light mb-12 opacity-80">
+            Toughened Glass • Designer Mirrors • LED Mirrors • Windows & Partitions
           </p>
-          <div className="flex justify-center gap-8">
-            <a href="#collections" className="btn-line uppercase text-[10px] tracking-[0.3em] pb-1">
-              View Collections
+
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
+            <a href="#contact" className="btn-luxury bg-accent text-dark border-none">
+              <span>Get Free Site Visit</span>
             </a>
-            <a href="#contact" className="btn-line text-[10px] uppercase tracking-[0.3em] pb-1">
-              Book Consultation
+            <a href="https://wa.me/9266747433" className="btn-luxury text-white">
+              <span>WhatsApp Now</span>
             </a>
+          </div>
+
+          <div className="mt-20 flex justify-center gap-12 opacity-40 grayscale">
+            <div className="text-center">
+              <div className="text-3xl font-bold">62+</div>
+              <div className="text-[8px] uppercase tracking-widest">Happy Clients</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold">500+</div>
+              <div className="text-[8px] uppercase tracking-widest">Projects Done</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold">10+</div>
+              <div className="text-[8px] uppercase tracking-widest">Years Exp</div>
+            </div>
           </div>
         </motion.div>
       </div>
-      
-      {/* Scroll Indicator */}
-      <motion.div 
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50"
-      >
-        <ArrowDown className="w-6 h-6" />
-      </motion.div>
+
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 opacity-40">
+        <div className="text-[8px] uppercase tracking-[0.5em] vertical-text">Scroll</div>
+        <div className="w-px h-12 bg-white/20 relative overflow-hidden">
+          <motion.div 
+            animate={{ y: [0, 48] }}
+            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+            className="absolute top-0 left-0 w-full h-4 bg-accent"
+          />
+        </div>
+      </div>
     </section>
   );
 };
 
-const StudioSpotlight = () => {
+const HowItWorks = () => {
+  const steps = [
+    {
+      icon: <Maximize className="w-8 h-8" />,
+      title: "Consultation & Measurement",
+      desc: "On-site visit, expert guidance, and custom sizing for your specific space."
+    },
+    {
+      icon: <Settings className="w-8 h-8" />,
+      title: "Design & Fabrication",
+      desc: "High-quality toughened glass & precision framing tailored to your vision."
+    },
+    {
+      icon: <Truck className="w-8 h-8" />,
+      title: "Installation & Finish",
+      desc: "Clean, safe, on-time professional installation by our expert team."
+    }
+  ];
+
   return (
-    <section id="studio" className="relative h-screen flex flex-col items-center justify-between py-16 overflow-hidden bg-slate-900 text-white border-b border-white/10">
-      <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-50">
-        <source src="https://videos.pexels.com/video-files/7034458/7034458-uhd_2560_1440_30fps.mp4" type="video/mp4" />
-      </video>
-      
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 z-0"></div>
-
-      <motion.div 
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="relative z-10 flex flex-col items-center mt-12"
-      >
-        <div className="mb-8 opacity-90">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
-            <circle cx="20" cy="20" r="18" strokeOpacity="0.5"></circle>
-            <circle cx="20" cy="20" r="12"></circle>
-            <path d="M20 8v24M8 20h24" strokeOpacity="0.3"></path>
-          </svg>
+    <section className="py-32 bg-white px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-24">
+          <span className="text-accent uppercase tracking-[0.5em] text-[10px] font-bold mb-4 block">Our Process</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase">How It Works</h2>
         </div>
-        
-        <p className="text-[10px] uppercase tracking-[0.5em] mb-2 font-light">The</p>
-        <h2 className="font-serif text-6xl md:text-8xl tracking-[0.2em] uppercase font-light text-center leading-none mb-6">
-          STUDIO
-        </h2>
-        
-        <div className="flex items-center gap-6 text-[10px] uppercase tracking-[0.3em] font-medium text-white/80">
-          <span>LED Mirrors</span>
-          <span className="w-1 h-1 bg-white rounded-full opacity-50"></span>
-          <span>Toughened Glass</span>
-          <span className="w-1 h-1 bg-white rounded-full opacity-50"></span>
-          <span>Partitions</span>
-        </div>
-      </motion.div>
 
-      <div className="relative z-10">
-        <button className="group flex items-center gap-3 backdrop-blur-md bg-white/10 border border-white/20 px-8 py-4 rounded-full hover:bg-white hover:text-black transition-all duration-500">
-          <span className="uppercase text-[10px] tracking-[0.3em] font-semibold">Watch Studio Tour</span>
-          <div className="bg-white text-black rounded-full p-1 group-hover:bg-black group-hover:text-white transition-colors">
-            <Play className="w-3 h-3 fill-current" />
-          </div>
-        </button>
-      </div>
-
-      <div className="relative z-10 mb-8 text-center">
-        <h3 className="text-2xl font-serif tracking-[0.3em] uppercase">URBAN GLASS</h3>
-        <p className="text-[10px] uppercase tracking-[0.3em] opacity-50 mt-2">Gurugram's Luxury Standard</p>
-      </div>
-    </section>
-  );
-};
-
-const Intro = () => {
-  return (
-    <section className="py-32 px-6 md:px-20 bg-bg relative z-10">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-        <div className="relative order-2 md:order-1">
-          <div className="aspect-[3/4] overflow-hidden relative group">
-            <img 
-              src="https://picsum.photos/seed/craftsman/800/1000" 
-              className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 scale-100 group-hover:scale-105" 
-              alt="Master Craftsman"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none mix-blend-overlay">
-              <video autoPlay muted loop playsInline className="w-full h-full object-cover">
-                <source src="https://videos.pexels.com/video-files/3205626/3205626-hd_1920_1080_25fps.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </div>
-          
-          <div className="absolute -bottom-6 -right-6 bg-dark text-white p-8 w-max max-w-xs z-10 shadow-2xl">
-            <div className="font-display text-xl">PRECISION</div>
-            <div className="text-[10px] uppercase tracking-widest opacity-60 mt-2">
-              Our Core Philosophy
-            </div>
-          </div>
-        </div>
-        <div className="order-1 md:order-2">
-          <div className="text-[10px] uppercase tracking-[0.4em] text-gray-500 mb-6 flex items-center gap-2">
-            <span className="w-8 h-px bg-gray-400"></span> Luxury Glass Specialists
-          </div>
-          <h2 className="font-display text-3xl md:text-5xl mb-8 tracking-tight leading-tight uppercase">
-            YOUR TRUSTED
-            <br />
-            <span className="text-accent">GLASS PARTNER</span>
-          </h2>
-          <div className="space-y-6 text-gray-700 font-light leading-relaxed text-lg">
-            <p>
-              Welcome to URBAN GLASS, your trusted glass and mirror experts in Sector 69, Darbaripur Road, Gurgaon. We specialize in toughened glass, decorative mirrors, designer glass, and high-quality fittings for residential, commercial, and industrial spaces.
-            </p>
-            <p>
-              With years of experience in the glass industry, our team delivers precision, durability, and modern designs in every project. From glass partitions and shower cabins to wall mirrors and custom furniture glass, we provide complete solutions tailored to your needs.
-            </p>
-            <div className="py-6 border-t border-b border-gray-300">
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-[10px] uppercase tracking-[0.2em] font-medium">
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-accent" />
-                  Premium Quality
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-accent" />
-                  Custom Solutions
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-accent" />
-                  Expert Installation
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-accent" />
-                  Affordable Pricing
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-accent" />
-                  Customer Satisfaction
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-4 h-4 text-accent" />
-                  Local Gurgaon Service
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-10">
-            <a href="#contact" className="inline-flex items-center gap-3 uppercase text-[10px] tracking-[0.3em] border border-black px-8 py-4 hover:bg-black hover:text-white transition-colors duration-300">
-              Book Consultation
-              <ArrowUpRight className="w-4 h-4" />
-            </a>
-          </div>
+        <div className="grid md:grid-cols-3 gap-12">
+          {steps.map((step, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.2 }}
+              className="group p-12 border border-black/5 hover:border-accent transition-colors duration-500 relative overflow-hidden"
+            >
+              <div className="text-accent mb-8 group-hover:scale-110 transition-transform duration-500">{step.icon}</div>
+              <h3 className="text-xl font-bold uppercase tracking-tight mb-4">{step.title}</h3>
+              <p className="text-gray-500 font-light leading-relaxed">{step.desc}</p>
+              <div className="absolute -bottom-4 -right-4 text-8xl font-bold text-black/[0.02] group-hover:text-accent/[0.05] transition-colors">0{i+1}</div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
   );
 };
 
-const CardStack = () => {
+const Products = () => {
   const products = [
     {
-      id: "01",
-      title: "TOUGHENED GLASS",
-      location: "8mm, 10mm, 12mm",
-      desc: "Strong, durable & stylish glass for partitions, railings, shower cubicles, and doors. Engineered for maximum safety and modern aesthetics.",
-      price: "Premium Quality Guaranteed",
-      image: "https://picsum.photos/seed/toughened/800/1000",
-      video: null
+      name: "LED Mirror with Frame",
+      features: "Custom Colors • Touch Sensor • Anti-Fog",
+      image: "https://images.unsplash.com/photo-1618220179428-22790b461013?q=80&w=800&auto=format&fit=crop"
     },
     {
-      id: "02",
-      title: "DECORATIVE MIRRORS",
-      location: "Custom Wall Mirrors",
-      desc: "Tinted mirrors and designer styles to enhance modern interiors. Perfect for living rooms, bedrooms, and offices to create a spacious feel.",
-      price: "Bespoke Designs",
-      image: "https://picsum.photos/seed/dec-mirror/800/1000",
-      video: null
+      name: "Toughened Glass Panels",
+      features: "High Strength • Safety Glass • Custom Cut",
+      image: "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?q=80&w=800&auto=format&fit=crop"
     },
     {
-      id: "03",
-      title: "FROSTED & DESIGNER GLASS",
-      location: "Privacy & Aesthetics",
-      desc: "Elegant frosted and patterned glass for office cabins, bathrooms, and decorative interiors. Combines privacy with sophisticated design.",
-      price: "Custom Patterns",
-      image: "https://picsum.photos/seed/frosted/800/1000",
-      video: null
+      name: "Shower Glass Partitions",
+      features: "Frameless • Sleek • Water Resistant",
+      image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=800&auto=format&fit=crop"
     },
     {
-      id: "04",
-      title: "INSTALLATION SERVICE",
-      location: "Professional Support",
-      desc: "Expert repair, cutting, polishing & drilling services. Reliable fitting for homes, offices, and commercial projects by local Gurgaon experts.",
-      price: "Onsite Support Available",
-      image: "https://picsum.photos/seed/install/800/1000",
-      video: null
+      name: "Decorative Wall Mirrors",
+      features: "Designer Styles • Tinted • Modern",
+      image: "https://images.unsplash.com/photo-1616486341351-7973a69605d2?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      name: "Glass Windows & Doors",
+      features: "Energy Efficient • Sound Proof • Secure",
+      image: "https://images.unsplash.com/photo-1503708928676-1cb796a0891e?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      name: "Aluminium Frame Glass",
+      features: "Durable • Minimalist • Multiple Finishes",
+      image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      name: "Commercial Glass Solutions",
+      features: "Office Partitions • Shop Fronts • Safety",
+      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=800&auto=format&fit=crop"
+    },
+    {
+      name: "Custom Glass Projects",
+      features: "Bespoke Designs • Unique Finishes",
+      image: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?q=80&w=800&auto=format&fit=crop"
     }
   ];
 
   return (
-    <section id="collections" className="stack-section py-32">
-      <div className="text-center mb-24 px-6">
-        <div className="text-[10px] uppercase tracking-[0.5em] mb-4 opacity-50">
-          Selected Collections
-        </div>
-        <h2 className="font-display text-4xl md:text-6xl tracking-tight uppercase">
-          PRODUCT SHOWCASE
-        </h2>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6">
-        {products.map((p, i) => (
-          <div key={p.id} className="card-item">
-            <div className="card-inner">
-              <div className="card-content">
-                <div>
-                  <div className="text-4xl font-display mb-4 text-bg opacity-30">
-                    {p.id}
-                  </div>
-                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight uppercase">
-                    {p.title}
-                  </h3>
-                  <p className="text-[10px] mt-4 opacity-70 uppercase tracking-[0.3em] flex items-center gap-2">
-                    <MapPin className="w-3 h-3" />
-                    {p.location}
-                  </p>
-                </div>
-                <div className="text-gray-400 font-light text-sm md:text-base leading-relaxed my-6">
-                  {p.desc}
-                  <br /><br />
-                  <span className="text-white block mt-2 text-lg font-normal">
-                    {p.price}
-                  </span>
-                </div>
-                <button className="text-left uppercase tracking-[0.3em] text-[10px] border-b border-white/30 pb-2 w-max hover:text-white transition-colors group flex items-center gap-2">
-                  Request Details
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-              <div className="relative overflow-hidden group">
-                {p.video ? (
-                  <video 
-                    className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" 
-                    autoPlay loop muted playsInline
-                  >
-                    <source src={p.video} type="video/mp4" />
-                  </video>
-                ) : (
-                  <img 
-                    src={p.image} 
-                    className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-700" 
-                    alt={p.title}
-                    referrerPolicy="no-referrer"
-                  />
-                )}
-                <div className="absolute bottom-6 right-6 bg-black/50 backdrop-blur px-3 py-1 text-[8px] uppercase tracking-wider text-white border border-white/20">
-                  {p.video ? "Video Preview" : "Visual Reference"}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-};
-
-const WhyInvest = () => {
-  return (
-    <section className="py-32 bg-bg relative z-10 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
-          <div>
-            <h2 className="font-display text-3xl md:text-4xl mb-6 tracking-tight uppercase">
-              WHY CHOOSE URBAN GLASS
-            </h2>
-            <div className="h-px w-20 bg-black/20 mb-8"></div>
-            <p className="text-gray-600 font-light text-lg leading-relaxed mb-8">
-              We bring Gurgaon's finest homes and commercial spaces to life with glass work that defines luxury, durability, and precision.
-            </p>
-          </div>
-          <div className="bg-white/50 p-10 border border-white/60 backdrop-blur-sm shadow-lg">
-            <ul className="space-y-8">
-              <li className="flex items-start gap-4 group">
-                <div className="bg-white p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-[10px] uppercase tracking-[0.2em] mb-1">
-                    Premium Quality Glass & Mirrors
-                  </h4>
-                  <p className="text-xs text-gray-500">
-                    Toughened, decorative, and custom solutions using only high-grade products.
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="bg-white p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                  <Award className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-[10px] uppercase tracking-[0.2em] mb-1">
-                    Expert Craftsmanship
-                  </h4>
-                  <p className="text-xs text-gray-500">
-                    Precision glass cutting, polishing, and edge finishing for a perfect look.
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="bg-white p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                  <Shield className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-[10px] uppercase tracking-[0.2em] mb-1">
-                    Professional Installation
-                  </h4>
-                  <p className="text-xs text-gray-500">
-                    Reliable and safe fitting for homes, offices, and commercial projects.
-                  </p>
-                </div>
-              </li>
-              <li className="flex items-start gap-4 group">
-                <div className="bg-white p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                  <Layout className="w-5 h-5 text-accent" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-[10px] uppercase tracking-[0.2em] mb-1">
-                    Custom Designs
-                  </h4>
-                  <p className="text-xs text-gray-500">
-                    Tailored solutions that fit your style and space requirements perfectly.
-                  </p>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const WorkGallery = () => {
-  const projects = [
-    {
-      title: "Office Glass Partitions",
-      desc: "Create a professional and modern environment with natural light flow and noise control.",
-      image: "https://picsum.photos/seed/office-part/800/600"
-    },
-    {
-      title: "Shower Glass Cabins",
-      desc: "Luxury toughened safety glass cabins, custom-designed to be water-resistant and durable.",
-      image: "https://picsum.photos/seed/shower-cabin/800/600"
-    },
-    {
-      title: "Balcony & Stair Railings",
-      desc: "Strong, secure toughened glass railings that create an open and spacious look.",
-      image: "https://picsum.photos/seed/railing/800/600"
-    },
-    {
-      title: "Glass Tables & Furniture",
-      desc: "Custom-cut glass for dining tables and office desks with a smooth, premium finish.",
-      image: "https://picsum.photos/seed/furniture/800/600"
-    },
-    {
-      title: "Gym & Dance Studio Mirrors",
-      desc: "Premium distortion-free mirrors with strong mounting for effective performance.",
-      image: "https://picsum.photos/seed/gym-mirror/800/600"
-    },
-    {
-      title: "Wall & Bathroom Mirrors",
-      desc: "Moisture-resistant, elegant mirrors designed to make spaces appear larger and brighter.",
-      image: "https://picsum.photos/seed/bathroom-mirror/800/600"
-    },
-    {
-      title: "Custom Designer Mirrors",
-      desc: "Creative shapes, patterns, and finishes to bring your unique vision to life.",
-      image: "https://picsum.photos/seed/custom-mirror/800/600"
-    }
-  ];
-
-  return (
-    <section id="gallery" className="py-32 bg-dark text-bg relative z-10 px-6">
+    <section id="products" className="py-32 bg-bg px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <span className="text-accent uppercase tracking-[0.5em] text-[10px] font-semibold mb-4 block">Our Work Gallery</span>
-          <h2 className="font-display text-4xl md:text-6xl uppercase">Glass Projects</h2>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
+          <div>
+            <span className="text-accent uppercase tracking-[0.5em] text-[10px] font-bold mb-4 block">Our Collections</span>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase">Premium Solutions</h2>
+          </div>
+          <p className="max-w-md text-gray-500 font-light leading-relaxed">
+            Explore our architectural glass and mirror collections designed for modern luxury interiors.
+          </p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {projects.map((p, i) => (
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {products.map((p, i) => (
             <motion.div 
               key={i}
               whileHover={{ y: -10 }}
-              className="group relative overflow-hidden aspect-[4/5] bg-black/20"
+              className="group bg-white border border-black/5 overflow-hidden"
             >
-              <img 
-                src={p.image} 
-                className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110" 
-                alt={p.title}
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent p-6 flex flex-col justify-end">
-                <h4 className="text-lg font-display mb-2 uppercase leading-tight">{p.title}</h4>
-                <p className="text-[8px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-500 leading-relaxed">{p.desc}</p>
+              <div className="aspect-[4/5] overflow-hidden relative">
+                <img 
+                  src={p.image} 
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                  alt={p.name}
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-dark/20 group-hover:bg-dark/0 transition-colors duration-500"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-lg font-bold uppercase tracking-tight mb-2">{p.name}</h3>
+                <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-6">{p.features}</p>
+                <a href="#contact" className="flex items-center justify-between group/btn">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] border-b border-black/20 pb-1 group-hover/btn:border-accent transition-colors">Get Quote</span>
+                  <ArrowUpRight className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                </a>
               </div>
             </motion.div>
           ))}
@@ -542,188 +328,244 @@ const WorkGallery = () => {
   );
 };
 
-const LocationSection = () => {
+const WhyUs = () => {
+  const features = [
+    {
+      icon: <Shield className="w-6 h-6" />,
+      title: "Premium Toughened Glass",
+      desc: "Maximum safety and durability for all installations."
+    },
+    {
+      icon: <Sparkles className="w-6 h-6" />,
+      title: "Clean Edge Finishing",
+      desc: "Precision polishing for a flawless, luxury look."
+    },
+    {
+      icon: <Zap className="w-6 h-6" />,
+      title: "Moisture Resistant",
+      desc: "Long-life mirrors designed for humid environments."
+    },
+    {
+      icon: <Award className="w-6 h-6" />,
+      title: "Factory Pricing",
+      desc: "Competitive rates without compromising on quality."
+    },
+    {
+      icon: <Settings className="w-6 h-6" />,
+      title: "Professional Installation",
+      desc: "Expert wiring and safe onsite fitting."
+    },
+    {
+      icon: <Building2 className="w-6 h-6" />,
+      title: "Expertise",
+      desc: "Residential and commercial project specialists."
+    }
+  ];
+
   return (
-    <section id="location" className="py-32 bg-bg relative z-10 px-6 border-t border-black/5">
+    <section id="services" className="py-32 bg-dark text-white px-6 overflow-hidden">
+      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-24 items-center">
+        <div>
+          <span className="text-accent uppercase tracking-[0.5em] text-[10px] font-bold mb-4 block">Why Urban Glass</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase mb-12 leading-none">
+            Uncompromising <br />
+            <span className="gold-gradient">Quality Standards</span>
+          </h2>
+          
+          <div className="grid sm:grid-cols-2 gap-12">
+            {features.map((f, i) => (
+              <div key={i} className="group">
+                <div className="text-accent mb-4 group-hover:scale-110 transition-transform">{f.icon}</div>
+                <h4 className="text-sm font-bold uppercase tracking-widest mb-2">{f.title}</h4>
+                <p className="text-xs text-gray-500 font-light leading-relaxed">{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative">
+          <div className="aspect-square glass-dark p-4 relative z-10">
+            <img 
+              src="https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?q=80&w=1000&auto=format&fit=crop" 
+              className="w-full h-full object-cover grayscale opacity-60"
+              alt="Quality Glass"
+            />
+          </div>
+          <div className="absolute -top-12 -right-12 w-64 h-64 bg-accent/10 blur-[100px] rounded-full"></div>
+          <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-accent/10 blur-[100px] rounded-full"></div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Reviews = () => {
+  const reviews = [
+    {
+      name: "Rahul Sharma",
+      role: "Home Owner",
+      text: "Amazing quality LED mirrors. The custom framing matches my bathroom perfectly. Professional installation team.",
+      stars: 5
+    },
+    {
+      name: "Priya Gupta",
+      role: "Interior Designer",
+      text: "Urban Glass is my go-to for all my architectural projects. Their toughened glass partitions are top-notch.",
+      stars: 5
+    },
+    {
+      name: "Vikram Singh",
+      role: "Commercial Client",
+      text: "Great experience with their office glass partitions. On-time delivery and very clean finishing.",
+      stars: 5
+    }
+  ];
+
+  return (
+    <section id="reviews" className="py-32 bg-white px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div>
-            <div className="text-[10px] uppercase tracking-[0.4em] text-gray-400 mb-6">
-              Visit Our Studio
-            </div>
-            <h2 className="font-display text-3xl md:text-5xl mb-8 tracking-tight uppercase">
-              GURUGRAM
-              <br />
-              HEADQUARTERS
-            </h2>
-            <div className="space-y-8 text-gray-600 font-light text-lg leading-relaxed">
-              <div className="flex items-start gap-4">
-                <MapPin className="w-6 h-6 text-accent shrink-0" />
-                <p>Sector 69, Darbaripur Road,<br />Gurgaon, Haryana 122101</p>
+        <div className="text-center mb-24">
+          <span className="text-accent uppercase tracking-[0.5em] text-[10px] font-bold mb-4 block">Testimonials</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter uppercase">Trusted by Gurgaon</h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {reviews.map((r, i) => (
+            <div key={i} className="p-12 border border-black/5 bg-bg/50">
+              <div className="flex gap-1 mb-6">
+                {[...Array(r.stars)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 text-accent fill-accent" />
+                ))}
               </div>
-              <div className="flex items-start gap-4">
-                <Clock className="w-6 h-6 text-accent shrink-0" />
-                <div>
-                  <p className="font-semibold text-dark uppercase text-[10px] tracking-widest mb-1">Studio Hours</p>
-                  <p>Mon - Sat: 9:00 AM - 8:00 PM</p>
-                  <p>Sunday: By Appointment Only</p>
-                </div>
+              <p className="text-gray-600 font-light italic leading-relaxed mb-8">"{r.text}"</p>
+              <div>
+                <div className="font-bold uppercase tracking-widest text-xs">{r.name}</div>
+                <div className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">{r.role}</div>
               </div>
             </div>
-            <div className="mt-12">
-              <a 
-                href="https://www.google.com/maps/place/URBAN+GLASS/@28.394651,77.0363999,698m/data=!3m2!1e3!4b1!4m6!3m5!1s0x390d23143ae727f7:0x57100907f465c786!8m2!3d28.394651!4d77.0363999!16s%2Fg%2F11x6dj0z3c" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 uppercase text-[10px] tracking-[0.3em] bg-dark text-white px-8 py-4 hover:bg-accent transition-colors duration-300"
-              >
-                Open in Google Maps
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-          <div className="h-[500px] w-full bg-white shadow-2xl relative overflow-hidden group">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3509.3248643874!2d77.033824975503!3d28.39465567579659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d23143ae727f7%3A0x57100907f465c786!2sURBAN%20GLASS!5e0!3m2!1sen!2sin!4v1740154200000!5m2!1sen!2sin" 
-              width="100%" 
-              height="100%" 
-              style={{ border: 0 }} 
-              allowFullScreen 
-              loading="lazy" 
-              referrerPolicy="no-referrer-when-downgrade"
-              className="grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
-            ></iframe>
-            <div className="absolute inset-0 pointer-events-none border border-black/5"></div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
   );
 };
 
-const MediaManager = () => {
-  const [activeTab, setActiveTab] = React.useState<'upload' | 'embed'>('upload');
-  
+const CTA = () => {
   return (
-    <section className="py-32 bg-bg relative z-10 px-6 border-t border-black/5">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-2 gap-16 items-start">
-          <div>
-            <div className="text-[10px] uppercase tracking-[0.4em] text-gray-400 mb-6">
-              Our Process
-            </div>
-            <h2 className="font-display text-3xl md:text-5xl mb-8 tracking-tight uppercase">
-              DESIGN & MEDIA
-              <br />
-              COLLABORATION
-            </h2>
-            <p className="text-gray-600 font-light text-lg leading-relaxed mb-8">
-              We work closely with interior designers and architects. Use our portal to share your site measurements and design inspirations seamlessly.
-            </p>
+    <section className="py-32 bg-dark text-white px-6 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto text-center relative z-10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-5xl md:text-8xl font-bold tracking-tighter uppercase mb-8 leading-none">
+            Thinking of Glass Work <br />
+            <span className="gold-gradient text-4xl md:text-7xl">For Your Home or Office?</span>
+          </h2>
+          <p className="text-lg md:text-xl font-light opacity-60 mb-12 max-w-2xl mx-auto">
+            Get expert consultation, transparent pricing and premium finish. Let's bring your vision to life.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-8">
+            <a href="tel:9266747433" className="btn-luxury bg-accent text-dark border-none">
+              <span>Call Now</span>
+            </a>
+            <a href="https://wa.me/9266747433" className="btn-luxury text-white">
+              <span>WhatsApp for Quote</span>
+            </a>
           </div>
-          <div className="bg-white p-8 shadow-2xl border border-white/60 relative">
-            <div className="flex gap-6 mb-8 border-b border-gray-100">
-              <button 
-                onClick={() => setActiveTab('upload')}
-                className={`pb-4 text-[10px] uppercase tracking-[0.3em] font-semibold transition-all ${activeTab === 'upload' ? 'border-b-2 border-black text-black' : 'text-gray-400'}`}
-              >
-                Upload Inspiration
-              </button>
-              <button 
-                onClick={() => setActiveTab('embed')}
-                className={`pb-4 text-[10px] uppercase tracking-[0.3em] font-semibold transition-all ${activeTab === 'embed' ? 'border-b-2 border-black text-black' : 'text-gray-400'}`}
-              >
-                Embed Reference
-              </button>
-            </div>
-            
-            {activeTab === 'upload' ? (
-              <div className="border-2 border-dashed border-gray-200 bg-gray-50 hover:bg-gray-100 transition-colors p-12 text-center cursor-pointer relative group rounded-lg">
-                <input type="file" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" multiple />
-                <div className="pointer-events-none transition-transform group-hover:scale-105">
-                  <CloudUpload className="w-8 h-8 mx-auto mb-4 text-gray-400" />
-                  <p className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gray-500">
-                    Drag & Drop or Click to Upload
-                  </p>
-                  <p className="text-[8px] text-gray-400 mt-2 uppercase tracking-widest">
-                    JPG, PNG, PDF Supported
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex gap-0">
-                <input 
-                  type="text" 
-                  className="w-full bg-gray-50 border border-gray-200 p-4 text-sm focus:border-black outline-none transition-colors font-medium placeholder:text-gray-400" 
-                  placeholder="Paste Reference Link..." 
-                />
-                <button className="bg-black text-white px-6 text-[10px] uppercase tracking-[0.3em] hover:bg-accent transition-colors">
-                  Add
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
+        </motion.div>
+      </div>
+      <div className="absolute inset-0 opacity-10 grayscale pointer-events-none">
+        <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069&auto=format&fit=crop" className="w-full h-full object-cover" alt="Architecture" />
       </div>
     </section>
   );
 };
 
-const FooterReveal = () => {
+const Footer = () => {
   return (
-    <footer className="footer-sticky" id="contact">
-      <motion.div 
-        initial={{ y: 100, opacity: 0, scale: 0.9 }}
-        whileInView={{ y: 0, opacity: 1, scale: 1 }}
-        viewport={{ once: false }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="relative z-10 text-center px-4 w-full max-w-4xl"
-      >
-        <div className="text-[10px] uppercase tracking-[0.5em] mb-4 text-gray-500">
-          Ready to elevate your space?
-        </div>
-        <h2 className="font-display text-[5vw] leading-none mb-12 uppercase">
-          LET'S DISCUSS
-          <br />
-          YOUR VISION
-        </h2>
-
-        <div className="grid md:grid-cols-2 gap-6 max-w-lg mx-auto w-full">
-          <a href="https://wa.me/9266747433" className="group border border-white/20 p-6 hover:bg-white hover:text-black transition-all duration-500">
-            <div className="flex justify-between items-start mb-4">
-              <Calendar className="w-6 h-6" />
-              <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+    <footer id="contact" className="bg-charcoal text-white pt-32 pb-12 px-6">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24">
+        <div className="lg:col-span-1">
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-8 h-8 border-2 border-accent flex items-center justify-center">
+              <span className="text-lg font-bold tracking-tighter">U</span>
             </div>
-            <div className="text-left text-[10px] uppercase tracking-[0.3em] font-semibold">
-              Book Site Visit
-            </div>
-          </a>
-          <a href="tel:9266747433" className="group border border-white/20 p-6 hover:bg-white hover:text-black transition-all duration-500">
-            <div className="flex justify-between items-start mb-4">
-              <FilePlus className="w-6 h-6" />
-              <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
-            <div className="text-left text-[10px] uppercase tracking-[0.3em] font-semibold">
-              Call 9266747433
-            </div>
-          </a>
+            <span className="text-lg font-bold tracking-[0.2em] uppercase">Urban Glass</span>
+          </div>
+          <p className="text-xs text-gray-500 font-light leading-relaxed mb-8">
+            Gurgaon's premier architectural glass studio specializing in luxury mirrors and toughened glass solutions for modern spaces.
+          </p>
+          <div className="flex gap-4">
+            <a href="#" className="w-10 h-10 glass flex items-center justify-center hover:bg-accent hover:text-dark transition-all duration-500"><Star className="w-4 h-4" /></a>
+            <a href="#" className="w-10 h-10 glass flex items-center justify-center hover:bg-accent hover:text-dark transition-all duration-500"><Star className="w-4 h-4" /></a>
+            <a href="#" className="w-10 h-10 glass flex items-center justify-center hover:bg-accent hover:text-dark transition-all duration-500"><Star className="w-4 h-4" /></a>
+          </div>
         </div>
 
-        <div className="flex justify-center gap-8 mt-20 text-[10px] uppercase tracking-[0.3em] text-gray-500">
-          <a href="https://share.google/9H56va3hvw9McAQ6S" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Google Profile</a>
-          <a href="mailto:urban.glass.in@gmail.com" className="hover:text-white transition-colors">Email</a>
-          <a href="tel:9266747433" className="hover:text-white transition-colors">Phone</a>
-          <a href="https://wa.me/9266747433" className="hover:text-white transition-colors">WhatsApp</a>
+        <div>
+          <h4 className="text-[10px] uppercase tracking-[0.4em] font-bold mb-8 text-accent">Quick Links</h4>
+          <ul className="flex flex-col gap-4 text-xs font-light text-gray-400">
+            <li><a href="#" className="hover:text-white transition-colors">Home</a></li>
+            <li><a href="#products" className="hover:text-white transition-colors">Products</a></li>
+            <li><a href="#services" className="hover:text-white transition-colors">Services</a></li>
+            <li><a href="#projects" className="hover:text-white transition-colors">Projects</a></li>
+            <li><a href="#reviews" className="hover:text-white transition-colors">Reviews</a></li>
+          </ul>
         </div>
-        <div className="mt-12 text-[8px] text-gray-700 uppercase tracking-widest">
-          © Urban Glass 2025 --- Premium Glass & Mirror Solutions
+
+        <div>
+          <h4 className="text-[10px] uppercase tracking-[0.4em] font-bold mb-8 text-accent">Services</h4>
+          <ul className="flex flex-col gap-4 text-xs font-light text-gray-400">
+            <li>LED Mirrors</li>
+            <li>Toughened Glass</li>
+            <li>Shower Partitions</li>
+            <li>Glass Railings</li>
+            <li>Commercial Solutions</li>
+          </ul>
         </div>
-      </motion.div>
-      <img 
-        src="https://images.unsplash.com/photo-1546412414-e1885259563a?q=80&w=2800&auto=format&fit=crop" 
-        className="absolute inset-0 w-full h-full object-cover opacity-10 pointer-events-none grayscale" 
-        alt="Glass Texture"
-      />
+
+        <div>
+          <h4 className="text-[10px] uppercase tracking-[0.4em] font-bold mb-8 text-accent">Contact Details</h4>
+          <ul className="flex flex-col gap-6 text-xs font-light text-gray-400">
+            <li className="flex items-start gap-4">
+              <MapPin className="w-4 h-4 text-accent shrink-0" />
+              <span>Tulip Chowk, Sector 69, Badshahpur, Gurugram, Haryana</span>
+            </li>
+            <li className="flex items-center gap-4">
+              <Phone className="w-4 h-4 text-accent shrink-0" />
+              <a href="tel:9266747433">92667 47433</a>
+            </li>
+            <li className="flex items-center gap-4">
+              <Mail className="w-4 h-4 text-accent shrink-0" />
+              <a href="mailto:urban.glass.in@gmail.com">urban.glass.in@gmail.com</a>
+            </li>
+            <li className="flex items-center gap-4">
+              <Clock className="w-4 h-4 text-accent shrink-0" />
+              <span>Mon – Sat: 9:00 AM – 8:00 PM</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="text-[8px] uppercase tracking-[0.4em] text-gray-600">
+          © 2026 URBAN GLASS. All Rights Reserved.
+        </div>
+        <div className="h-[200px] w-full md:w-[400px] glass-dark overflow-hidden">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3509.3248643874!2d77.033824975503!3d28.39465567579659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d23143ae727f7%3A0x57100907f465c786!2sURBAN%20GLASS!5e0!3m2!1sen!2sin!4v1740154200000!5m2!1sen!2sin" 
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            className="grayscale contrast-125"
+          ></iframe>
+        </div>
+      </div>
     </footer>
   );
 };
@@ -733,19 +575,15 @@ export default function App() {
     <div className="relative">
       <div className="noise-overlay"></div>
       <Navbar />
-      
-      <div className="footer-reveal-container">
+      <main>
         <Hero />
-        <StudioSpotlight />
-        <Intro />
-        <CardStack />
-        <WhyInvest />
-        <WorkGallery />
-        <LocationSection />
-        <MediaManager />
-      </div>
-
-      <FooterReveal />
+        <HowItWorks />
+        <Products />
+        <WhyUs />
+        <Reviews />
+        <CTA />
+      </main>
+      <Footer />
     </div>
   );
 }
